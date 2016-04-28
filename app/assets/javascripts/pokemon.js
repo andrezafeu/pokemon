@@ -19,8 +19,6 @@ PokemonApp.Pokemon.prototype.render = function () {
 		url: "/api/pokemon/" + this.id,
 		success: function (response) {
 			self.info = response;
-			console.log("Pokemon info:");
-			console.log(self.info);
 			$(".js-height").text(self.info.height);
 			$(".js-weight").text(self.info.weight);
 			$(".js-hp").text(self.info.hp);
@@ -29,10 +27,9 @@ PokemonApp.Pokemon.prototype.render = function () {
 			$(".js-attack").text(self.info.attack);
 			$(".js-defense").text(self.info.defense);
 			$(".js-speed").text(self.info.speed);
-			// $(".js-types").text(self.info.types);
-			//do append li to show the types of pokemon
-			displayTypes(self.info.types);
+			displayTypes(self.info);
 			$(".js-pokemon-modal").modal("show");
+			displayImage(self.info)
 			
 		},
 		error: function (error) {
@@ -43,16 +40,33 @@ PokemonApp.Pokemon.prototype.render = function () {
 
 };
 
-function displayTypes (types) {
-	console.log(types)
-	types.forEach(function (oneType) {
+function displayTypes (pokemon) {
+	pokemon.types.forEach(function (onePokemon) {
 		var types = `
 		    <li>
-		    	${oneType.name}
+		    	${onePokemon.name}
 		    </li>`;
 		    $(".js-types-list").append(types);
 	});
 }
+
+function displayImage (pokemon) {
+	var imagePath = "http://pokeapi.co";
+	console.log(imagePath);
+	$.ajax({
+		url: pokemon.sprites[0].resource_uri,
+		success: function (response) {
+			var image = `
+				<img src="${imagePath+response.image}">`;
+				$(".js-profile-image").append(image);
+			$(".js-pokemon-modal").modal("show");
+		},
+		error: function (error) {
+			console.log("Error");
+			console.log(error.responseJSON);
+		}
+	})
+};
 
 //This is a function that we will be calling
 PokemonApp.Pokemon.idFromUri = function (pokemonUri) {

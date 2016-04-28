@@ -22,6 +22,7 @@ PokemonApp.Pokemon.prototype.render = function () {
 			console.log("Pokemon info:");
 			console.log(self.info);
 
+			$(".js-pokemon-modal").modal("show");
 		},
 		error: function (error) {
 			console.log("Error");

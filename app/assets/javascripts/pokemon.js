@@ -11,6 +11,24 @@ PokemonApp.Pokemon = function (pokemonUri) {
 //This is a method of the class
 PokemonApp.Pokemon.prototype.render = function () {
 	console.log("Rendering pokemon: #" + this.id);
+
+	var self = this;
+
+	//default type of ajax is get
+	$.ajax({
+		url: "/api/pokemon/" + this.id,
+		success: function (response) {
+			self.info = response
+			console.log("Pokemon info:");
+			console.log(self.info);
+
+		},
+		error: function (error) {
+			console.log("Error");
+			console.log(error.responseJSON);
+		}
+	})
+
 };
 
 //This is a function that we will be calling
